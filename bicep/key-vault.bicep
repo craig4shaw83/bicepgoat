@@ -1,12 +1,12 @@
 @description('Name of environment')
-param env string = 'dev'
+param env string = 'sbx'
 
 @description('Default location for all resources.')
 param location string = resourceGroup().location
 
-var name = 'bicepgoat'
+var name = 'bg'
 
-resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
   name: '${name}-vault-${env}'
   location: location
 
@@ -24,7 +24,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
   }
 }
 
-resource secret 'Microsoft.KeyVault/vaults/secrets@2021-04-01-preview' = {
+resource secret 'Microsoft.KeyVault/vaults/secrets@2024-04-01-preview' = {
   parent: keyVault
   name: '${name}-secret-${env}'
 

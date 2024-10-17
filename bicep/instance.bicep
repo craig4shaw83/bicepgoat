@@ -1,19 +1,14 @@
 @description('Name of environment')
-param env string = 'dev'
+param env string = 'sbx'
 
 @description('Default location for all resources.')
 param location string = resourceGroup().location
 
-var name = 'bicepgoat'
+@description('Subnet ID for the NIC')
+param subnetId string
 
-resource existingVnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
-  name: '${name}-vnet-${env}'
-}
+var name = 'bg'
 
-resource existingSubnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' existing = {
-  parent: existingVnet
-  name: '${name}-subnet-${env}'
-}
 
 resource nic 'Microsoft.Network/networkInterfaces@2021-05-01' = {
   name: '${name}-nic-${env}'
@@ -26,7 +21,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2021-05-01' = {
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: existingSubnet.id
+            id: subnetId
           }
         }
       }
@@ -66,7 +61,7 @@ resource linuxVm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
     osProfile: {
       computerName: '${name}-linux-${env}'
       adminUsername: 'adminuser'
-      adminPassword: 'adminpass'
+      adminPassword: 'N0tV3ryS3cur3P@ssw0rd!'
       linuxConfiguration: {
         disablePasswordAuthentication: false
       }

@@ -1,12 +1,12 @@
 @description('Name of environment')
-param env string = 'dev'
+param env string = 'sbx'
 
 @description('Default location for all resources')
 param location string = resourceGroup().location
 
-var name = 'bicepgoat'
+var name = 'bg'
 
-resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
+resource aksCluster 'Microsoft.ContainerService/managedClusters@2024-07-01' = {
   name: '${name}-aks-${env}'
   location: location
 
@@ -14,7 +14,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    kubernetesVersion: '1.19.7'
+    kubernetesVersion: '1.28'
     dnsPrefix: '${name}-${env}'
     enableRBAC: false
 
@@ -23,6 +23,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2021-02-01' = {
         name: 'default'
         count: 2
         vmSize: 'Standard_D2_v2'
+        mode: 'System'
       }
     ]
     addonProfiles: {

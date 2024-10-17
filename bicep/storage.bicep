@@ -1,12 +1,12 @@
 @description('Name of environment')
-param env string = 'dev'
+param env string = 'sbx'
 
 @description('Default location for all resources.')
 param location string = resourceGroup().location
 
-var name = 'bicepgoat'
+var name = 'bg'
 
-resource datadisk 'Microsoft.Compute/disks@2021-12-01' = {
+resource datadisk 'Microsoft.Compute/disks@2024-03-02' = {
   name: '${name}-disk-${env}'
   location: location
   sku: {
@@ -14,6 +14,9 @@ resource datadisk 'Microsoft.Compute/disks@2021-12-01' = {
   }
 
   properties: {
+    creationData: {
+      createOption: 'Empty'
+    }
     diskSizeGB: 10
     encryptionSettingsCollection: {
       enabled: false
@@ -21,8 +24,8 @@ resource datadisk 'Microsoft.Compute/disks@2021-12-01' = {
   }
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
-  name: '${name}-sa-${env}'
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: '${name}sa${env}${uniqueString(resourceGroup().id, name)}'
   location: location
   kind: 'StorageV2'
   sku: {
@@ -35,15 +38,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
     networkAcls: {
       bypass: 'None'
       defaultAction: 'Deny'
-    }
-  }
-
-  resource configWeb 'config' = {
-    name: 'web'
-
-    properties: {
-      minTlsVersion: '1.1'
-      remoteDebuggingEnabled: true
     }
   }
 }

@@ -1,10 +1,10 @@
 @description('Name of environment')
-param env string = 'dev'
+param env string = 'sbx'
 
 @description('Default location for all resources.')
 param location string = resourceGroup().location
 
-var name = 'bicepgoat'
+var name = 'bg'
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: '${name}-app-service-plan-${env}'
