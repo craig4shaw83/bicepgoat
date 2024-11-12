@@ -19,6 +19,7 @@
 name: "Microsoft Defender For Devops"
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
