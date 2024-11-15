@@ -19,6 +19,7 @@
 name: "Microsoft Defender For Devops"
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -30,6 +31,10 @@ jobs:
   MSDO:
     # currently only windows latest is supported
     runs-on: windows-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
     steps:
     - uses: actions/checkout@v4

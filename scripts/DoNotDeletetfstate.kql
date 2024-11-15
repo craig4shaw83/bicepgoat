@@ -1,0 +1,8 @@
+# Creates a query to look for storage accounts that do not have a delete lock
+RawEntityMetadata
+| where Environment == 'Azure' and Identifiers.Type == 'microsoft.storage/storageaccounts'
+| where Name contains "tfstate"| extend ParsedData = parse_json(AdditionalData)
+| extend DeleteLock = iff(ParsedData.Locks contains "Delete", 'DELETE_LOCK_SET', 'NO_DELETE_LOCK')
+| extend HealthStatus = iff(DeleteLock == 'NO_DELETE_LOCK', 'UNHEALTHY', 'HEALTHY')
+| where DeleteLock == 'NO_DELETE_LOCK'| extend Record = dynamic({})
+| project Id, Name, Environment, Identifiers, AdditionalData, DeleteLock, HealthStatus, Record
