@@ -18,7 +18,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
       family: 'A'
     }
     networkAcls: {
-      defaultAction: 'Allow'
+      defaultAction: 'Deny'
       bypass: 'AzureServices'
     }
   }
